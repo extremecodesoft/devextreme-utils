@@ -4,8 +4,16 @@
   "description": "DevExtreme To Rest Helper Resources",
   "keywords": [
     "devextreme",
-    "laravel-orion"
+    "laravel-orion",
+    "typescript"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/extremecodesoft/devextreme-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/extremecodesoft/devextreme-utils/issues"
+  },
   "author": "Diogo Biolo D'Agostini",
   "license": "ISC",
   "main": "./dist/index.js",

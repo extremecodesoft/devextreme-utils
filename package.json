@@ -1,6 +1,6 @@
 {
-  "name": "@extremecode/devextreme-utils",
-  "version": "0.1.0",
+  "name": "@extremecodesoft/devextreme-utils",
+  "version": "0.1.1",
   "description": "DevExtreme To Rest Helper Resources",
   "keywords": [
     "devextreme",

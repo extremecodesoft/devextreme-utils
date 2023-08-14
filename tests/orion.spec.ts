@@ -1,4 +1,4 @@
-import { parseFilter } from '../src';
+import { parseFilter } from '../src/orion';
 
 describe('Orion - FindTransformer', () => {
   it('Should serialize devextreme complex filter to orion search filter', async () => {

@@ -52,10 +52,7 @@ export function parseFilter(filter: any, asArray: boolean = true): any {
     return asArray ? [result] : result;
   }
 
-  let condition = filter.find((item: any) => !Array.isArray(item));
-  if (!condition) {
-    condition = 'and';
-  }
+  const condition = filter.find((item: any) => !Array.isArray(item)) || 'and';
   const items = filter.filter((item: any) => Array.isArray(item));
   const result = {
     type: condition,

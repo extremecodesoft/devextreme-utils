@@ -127,5 +127,8 @@
     "setupFiles": [
       "fake-indexeddb/auto"
     ]
+  },
+  "dependencies": {
+    "@extremecodesoft/devextreme-utils": "^0.1.3"
   }
 }

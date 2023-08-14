@@ -1,6 +1,5 @@
 import { isEmpty } from 'lodash';
 import { Transformer } from './Transformer';
-//import { FindOptions } from '../DataStore';
 
 export class OrionFilterTransformer implements Transformer<any> {
   
@@ -20,9 +19,7 @@ export class OrionFilterTransformer implements Transformer<any> {
     ['custom', 'custom'],
   ]);
 
-  //{"and":[{"id": {"gt": 59158}},{"id": {"lt": 1158}}]}
   private normalizeOperator(operator: string) {
-    //console.log(operator);
     return this.operators.get(operator);
   }
 

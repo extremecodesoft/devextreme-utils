@@ -21,6 +21,9 @@
   "paths": {
     "@/*": [
       "src/*"
+    ],
+    "@/transformers/*": [
+      "src/transformers/*"
     ]
   },
   "include": [

@@ -25,6 +25,7 @@ const RESOLVERS = new Map<string, Resolver>([
   ['<', (value) => value],
   ['<=', (value) => value],
   ['<>', (value) => value],
+  ['!=', (value) => value],
   ['contains', (value) => `%${value}%`],
   ['notcontains', (value) => `%${value}%`],
   ['startswith', (value) => `${value}%`],

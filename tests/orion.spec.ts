@@ -17,16 +17,17 @@ describe('Orion - FindTransformer', () => {
         field: 'descricao',
         operator: 'like',
         value: '%titan%',
+        type: 'and'
       },
     ]);
 
     result = parseFilter([['codigo', '=', 1], 'or', ['codigo', '=', 2]]);
     expect(result).toEqual([
       {
-        type: 'or',
+        type: 'and',
         nested: [
-          { field: 'codigo', operator: '=', value: 1 },
-          { field: 'codigo', operator: '=', value: 2 },
+          { field: 'codigo', operator: '=', value: 1, type: 'or' },
+          { field: 'codigo', operator: '=', value: 2, type: 'or' },
         ],
       },
     ]);
@@ -40,12 +41,12 @@ describe('Orion - FindTransformer', () => {
       {
         type: 'and',
         nested: [
-          { field: 'identificador', operator: 'like', value: '%A%' },
+          { field: 'identificador', operator: 'like', value: '%A%', type: 'and'},
           {
-            type: 'or',
+            type: 'and',
             nested: [
-              { field: 'codigo', operator: '=', value: 1 },
-              { field: 'codigo', operator: '=', value: 2 },
+              { field: 'codigo', operator: '=', value: 1, type: 'or'},
+              { field: 'codigo', operator: '=', value: 2, type: 'or'},
             ],
           },
         ],
@@ -55,34 +56,34 @@ describe('Orion - FindTransformer', () => {
 
   it('Must validate serialization of operators and value', async () => {
     let result = parseFilter(['descricao', '=', 'titan']);
-    expect(result).toEqual([{ field: 'descricao', operator: '=', value: 'titan' }]);
+    expect(result).toEqual([{ field: 'descricao', operator: '=', value: 'titan', type: 'and' }]);
 
     result = parseFilter(['descricao', '<>', 'titan']);
-    expect(result).toEqual([{ field: 'descricao', operator: '!=', value: 'titan' }]);
+    expect(result).toEqual([{ field: 'descricao', operator: '!=', value: 'titan', type: 'and' }]);
 
     result = parseFilter(['codigo', '>', 1]);
-    expect(result).toEqual([{ field: 'codigo', operator: '>', value: 1 }]);
+    expect(result).toEqual([{ field: 'codigo', operator: '>', value: 1, type: 'and' }]);
 
     result = parseFilter(['codigo', '>=', 1]);
-    expect(result).toEqual([{ field: 'codigo', operator: '>=', value: 1 }]);
+    expect(result).toEqual([{ field: 'codigo', operator: '>=', value: 1, type: 'and' }]);
 
     result = parseFilter(['codigo', '<', 1]);
-    expect(result).toEqual([{ field: 'codigo', operator: '<', value: 1 }]);
+    expect(result).toEqual([{ field: 'codigo', operator: '<', value: 1, type: 'and' }]);
 
     result = parseFilter(['codigo', '<=', 1]);
-    expect(result).toEqual([{ field: 'codigo', operator: '<=', value: 1 }]);
+    expect(result).toEqual([{ field: 'codigo', operator: '<=', value: 1, type: 'and' }]);
 
     result = parseFilter(['descricao', 'contains', 'titan']);
-    expect(result).toEqual([{ field: 'descricao', operator: 'like', value: '%titan%' }]);
+    expect(result).toEqual([{ field: 'descricao', operator: 'like', value: '%titan%', type: 'and' }]);
 
     result = parseFilter(['descricao', 'notcontains', 'titan']);
-    expect(result).toEqual([{ field: 'descricao', operator: 'not like', value: '%titan%' }]);
+    expect(result).toEqual([{ field: 'descricao', operator: 'not like', value: '%titan%', type: 'and' }]);
 
     result = parseFilter(['descricao', 'startswith', 'titan']);
-    expect(result).toEqual([{ field: 'descricao', operator: 'like', value: 'titan%' }]);
+    expect(result).toEqual([{ field: 'descricao', operator: 'like', value: 'titan%', type: 'and' }]);
 
     result = parseFilter(['descricao', 'endswith', 'titan']);
-    expect(result).toEqual([{ field: 'descricao', operator: 'like', value: '%titan' }]);
+    expect(result).toEqual([{ field: 'descricao', operator: 'like', value: '%titan', type: 'and' }]);
 
     /*result = trasformer.execute(['codigo','in',[1]]);
     expect(result).toEqual([{field: 'codigo', operator: 'in', value: [1]}]);

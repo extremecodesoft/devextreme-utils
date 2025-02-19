@@ -35,11 +35,12 @@ const RESOLVERS = new Map<string, Resolver>([
   ['custom', (value) => value],
 ]);
 
-function parseFilterItem(item: any): any {
+function parseFilterItem(item: any, condition: string): any {
   return {
     field: item[0],
     operator: OPERATORS.get(item[1]),
     value: RESOLVERS.get(item[1])(item[2]),
+    type: condition
   };
 }
 
@@ -49,16 +50,16 @@ export function parseFilter(filter: any, asArray: boolean = true): any {
   }
 
   if (!Array.isArray(filter[0])) {
-    const result = parseFilterItem(filter);
+    const result = parseFilterItem(filter, 'and');
     return asArray ? [result] : result;
   }
 
   const condition = filter.find((item: any) => !Array.isArray(item)) || 'and';
   const items = filter.filter((item: any) => Array.isArray(item));
   const result = {
-    type: condition,
+    type: 'and',
     nested: items.map((item: any) =>
-      Array.isArray(item[0]) ? parseFilter(item, false) : parseFilterItem(item)
+      Array.isArray(item[0]) ? parseFilter(item, false) : parseFilterItem(item, condition)
     ),
   };
 

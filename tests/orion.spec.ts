@@ -56,13 +56,34 @@ describe('Orion - FindTransformer', () => {
     result = parseFilter(['data', 'between', ['2023-01-01', '2023-12-31']]);
     expect(result).toEqual([
       {
-        field: 'data',
-        operator: 'in_range',
-        value: ['2023-01-01', '2023-12-31'],
-        type: 'and'
+        type: 'and',
+        nested: [
+          { field: 'data', operator: '>=', value: '2023-01-01', type: 'or' },
+          { field: 'data', operator: '<=', value: '2023-12-31', type: 'or' },
+        ],
       },
     ]);
 
+    result = parseFilter([
+      ['identificador', 'contains', 'A'],
+      'and',
+      ['data', 'between', ['2023-01-01', '2023-12-31']],
+    ]);
+    expect(result).toEqual([
+      {
+        type: 'and',
+        nested: [
+          { field: 'identificador', operator: 'like', value: '%A%', type: 'and'},
+          {
+            type: 'and',
+            nested: [
+              { field: 'data', operator: '>=', value: '2023-01-01', type: 'or' },
+              { field: 'data', operator: '<=', value: '2023-12-31', type: 'or' },
+            ],
+          },
+        ],
+      },
+    ]);
 
   });
 
@@ -97,8 +118,8 @@ describe('Orion - FindTransformer', () => {
     result = parseFilter(['descricao', 'endswith', 'titan']);
     expect(result).toEqual([{ field: 'descricao', operator: 'like', value: '%titan', type: 'and' }]);
 
-    result = parseFilter(['data', 'between', ['2023-01-01', '2023-12-31']]);
-    expect(result).toEqual([{ field: 'data', operator: 'in_range', value: ['2023-01-01', '2023-12-31'], type: 'and' }]);
+    //result = parseFilter(['data', 'between', ['2023-01-01', '2023-12-31']]);
+    //expect(result).toEqual([{ field: 'data', operator: 'in_range', value: ['2023-01-01', '2023-12-31'], type: 'and' }]);
 
     /*result = trasformer.execute(['codigo','in',[1]]);
     expect(result).toEqual([{field: 'codigo', operator: 'in', value: [1]}]);

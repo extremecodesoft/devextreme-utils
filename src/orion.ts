@@ -16,7 +16,6 @@ const OPERATORS = new Map<string, string>([
   ['in', 'in'],
   ['not in', 'not in'],
   ['custom', 'custom'],
-  ['between', 'in_range'],
 ]);
 
 const RESOLVERS = new Map<string, Resolver>([
@@ -34,7 +33,6 @@ const RESOLVERS = new Map<string, Resolver>([
   ['in', (value) => value],
   ['not in', (value) => value],
   ['custom', (value) => value],
-  ['between', (value) => value],
 ]);
 
 function parseFilterItem(item: any, condition: string): any {
@@ -46,10 +44,35 @@ function parseFilterItem(item: any, condition: string): any {
   };
 }
 
+function normalizeFilterItem(item: any): any {
+  if (item[1] === 'between') {
+    return [
+      [item[0], '>=', item[2][0]],
+      'or',
+      [item[0], '<=', item[2][1]],
+    ];
+  }
+  return item;
+}
+
+// Convert between operator to two operators, and normalize nested filters
+function normalizeFilter(filter: any): any {
+  if (!Array.isArray(filter[0])) {
+    return normalizeFilterItem(filter);
+  }
+
+  const condition = filter.find((item: any) => !Array.isArray(item)) || 'and';
+  let items = filter.filter((item: any) => Array.isArray(item));
+  items = items.map((item: any) => (Array.isArray(item[0]) ? normalizeFilter(item) : normalizeFilterItem(item)));
+  return [items[0], condition, items[1]];
+}
+
 export function parseFilter(filter: any, asArray: boolean = true): any {
   if (!filter || isEmpty(filter) || !filter.length) {
     return null;
   }
+
+  filter = normalizeFilter(filter);
 
   if (!Array.isArray(filter[0])) {
     const result = parseFilterItem(filter, 'and');

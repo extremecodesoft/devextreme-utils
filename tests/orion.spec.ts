@@ -52,6 +52,18 @@ describe('Orion - FindTransformer', () => {
         ],
       },
     ]);
+
+    result = parseFilter(['data', 'between', ['2023-01-01', '2023-12-31']]);
+    expect(result).toEqual([
+      {
+        field: 'data',
+        operator: 'in_range',
+        value: ['2023-01-01', '2023-12-31'],
+        type: 'and'
+      },
+    ]);
+
+
   });
 
   it('Must validate serialization of operators and value', async () => {
@@ -84,6 +96,9 @@ describe('Orion - FindTransformer', () => {
 
     result = parseFilter(['descricao', 'endswith', 'titan']);
     expect(result).toEqual([{ field: 'descricao', operator: 'like', value: '%titan', type: 'and' }]);
+
+    result = parseFilter(['data', 'between', ['2023-01-01', '2023-12-31']]);
+    expect(result).toEqual([{ field: 'data', operator: 'in_range', value: ['2023-01-01', '2023-12-31'], type: 'and' }]);
 
     /*result = trasformer.execute(['codigo','in',[1]]);
     expect(result).toEqual([{field: 'codigo', operator: 'in', value: [1]}]);

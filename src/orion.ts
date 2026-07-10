@@ -16,6 +16,7 @@ const OPERATORS = new Map<string, string>([
   ['in', 'in'],
   ['not in', 'not in'],
   ['custom', 'custom'],
+  ['between', 'in_range'],
 ]);
 
 const RESOLVERS = new Map<string, Resolver>([
@@ -33,6 +34,7 @@ const RESOLVERS = new Map<string, Resolver>([
   ['in', (value) => value],
   ['not in', (value) => value],
   ['custom', (value) => value],
+  ['between', (value) => value],
 ]);
 
 function parseFilterItem(item: any, condition: string): any {

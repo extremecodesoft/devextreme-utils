@@ -61,10 +61,21 @@ function normalizeFilter(filter: any): any {
     return normalizeFilterItem(filter);
   }
 
-  const condition = filter.find((item: any) => !Array.isArray(item)) || 'and';
-  let items = filter.filter((item: any) => Array.isArray(item));
-  items = items.map((item: any) => (Array.isArray(item[0]) ? normalizeFilter(item) : normalizeFilterItem(item)));
-  return [items[0], condition, items[1]];
+  //const condition = filter.find((item: any) => !Array.isArray(item)) || 'and';
+  //let items = filter.filter((item: any) => Array.isArray(item));
+  //const items = filter.filter((item: any) => Array.isArray(item));
+  return filter.map((item: any) => {
+    if (!Array.isArray(item)) {
+      return item;
+    }
+    return (Array.isArray(item[0]) ? normalizeFilter(item) : normalizeFilterItem(item));
+  });
+  /*return items.reduce((acc: any, item: any) => {
+    if (acc.length === 0) {
+      return [item];
+    }
+    return [...acc, condition, item];
+  }, []);*/
 }
 
 export function parseFilter(filter: any, asArray: boolean = true): any {

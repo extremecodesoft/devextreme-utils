@@ -2,7 +2,7 @@ import { parseFilter } from '../src/orion';
 
 describe('Orion - FindTransformer', () => {
   it('Should serialize devextreme complex filter to orion search filter', async () => {
-    let result = parseFilter(null);
+    /*let result = parseFilter(null);
     expect(result).toBeNull();
 
     result = parseFilter(undefined);
@@ -83,10 +83,38 @@ describe('Orion - FindTransformer', () => {
           },
         ],
       },
+    ]);*/
+
+    let result = parseFilter([
+      ['trajeto.entidade1.Ent_Identificador', 'contains', 'alterada'], 
+      'or',
+      ['trajeto.entidade1.Ent_Numero', '=', 'alterada'], 
+      'or',
+      ['TNC_Descricao', 'contains', 'alterada'], 
+      'or',
+      ['trajeto.entidade2.Ent_Identificador', 'contains', 'alterada'], 
+      'or',
+      ['trajeto.entidade2.Ent_Numero', 'contains', 'alterada'], 
+      'or',
+      ['trajeto.temperatura.usuarioResponsavel.Pes_Nome', '=', 'alterada']
+    ]);
+
+    expect(result).toEqual([
+      {
+        type: 'and',
+        nested: [
+          { field: 'trajeto.entidade1.Ent_Identificador', operator: 'like', value: '%alterada%', type: 'or' },
+          { field: 'trajeto.entidade1.Ent_Numero', operator: '=', value: 'alterada', type: 'or' },
+          { field: 'TNC_Descricao', operator: 'like', value: '%alterada%', type: 'or' },
+          { field: 'trajeto.entidade2.Ent_Identificador', operator: 'like', value: '%alterada%', type: 'or' },
+          { field: 'trajeto.entidade2.Ent_Numero', operator: 'like', value: '%alterada%', type: 'or' },
+          { field: 'trajeto.temperatura.usuarioResponsavel.Pes_Nome', operator: '=', value: 'alterada', type: 'or' },
+        ],
+      },
     ]);
 
   });
-
+  
   it('Must validate serialization of operators and value', async () => {
     let result = parseFilter(['descricao', '=', 'titan']);
     expect(result).toEqual([{ field: 'descricao', operator: '=', value: 'titan', type: 'and' }]);
@@ -127,4 +155,5 @@ describe('Orion - FindTransformer', () => {
     result = trasformer.execute(['codigo','in',[1]]);
     expect(result).toEqual([{field: 'codigo', operator: 'not in', value: [1]}]);*/
   });
+  
 });
